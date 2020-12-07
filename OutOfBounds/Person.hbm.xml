@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   namespace="OutOfBounds" assembly="OutOfBounds">
+
+    <class name="Person" table="Person" lazy="true"  optimistic-lock="dirty" dynamic-update="true">
+
+        <id name="Id">
+            <column name="PersonId" sql-type="char(32)" not-null="true"/>
+            <generator class="uuid.hex" />
+        </id>
+
+        <one-to-one name="Address" cascade="all" />
+
+        <property name="Name">
+            <column name="Name" length="16" not-null="true" />
+        </property>
+
+    </class>
+
+    <class name="Address" table="Address" lazy="true" optimistic-lock="dirty" dynamic-update="true">
+        <id name="Id" column="personId">
+            <generator class="foreign">
+                <param name="property">Person</param>
+            </generator>
+        </id>
+        <one-to-one name="Person" constrained="true"/>
+
+        <property name="Street">
+            <column name="Street" length="16" not-null="true" />
+        </property>
+    </class>
+
+</hibernate-mapping>
